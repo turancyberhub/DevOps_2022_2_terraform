@@ -1,6 +1,12 @@
+locals {
+  Environment = "production"
+  sg_name = "terraform__alb_sg"
+  description = "Allow TLS inbound traffic"
+}
+
 resource "aws_lb" "terraform_alb" {
   name               = "terraform-alb"
-  internal           = false
+  internal           = var.alb_internal
   load_balancer_type = "application"
   security_groups    = [aws_security_group.terraform_alb_sg.id]
   subnets            = data.aws_subnet_ids.terraform_subnets.ids
@@ -8,7 +14,7 @@ resource "aws_lb" "terraform_alb" {
   enable_deletion_protection = true
 
   tags = {
-    Environment = "production"
+    Environment = local.Environment
   }
 }
 
@@ -16,8 +22,8 @@ resource "aws_lb" "terraform_alb" {
 #Load balancer security group
 
 resource "aws_security_group" "terraform_alb_sg" {
-  name        = "terraform__alb_sg"
-  description = "Allow TLS inbound traffic"
+  name        = local.sg_name
+  description = local.description
   vpc_id      = aws_vpc.terraform_vpc.id
 
 # inbound = ingress

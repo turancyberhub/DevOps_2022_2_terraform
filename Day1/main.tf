@@ -1,7 +1,6 @@
 provider "aws" {
   region     = "us-east-1"
-  access_key = "<please add your own access key here>"
-  secret_key = "<please add your own secret key here>"
+  profile    = var.profile
 }
 
 
@@ -27,15 +26,15 @@ resource "aws_security_group" "terraform_sg" {
 # inbound = ingress
   ingress {
     description      = "ssh from my home ip"
-    from_port        = 22
-    to_port          = 22
+    from_port        = var.ports[1]
+    to_port          = var.ports[1]
     protocol         = "tcp"
     cidr_blocks      = ["0.0.0.0/0"]
   }
 #outbound = egress
   egress {
-    from_port        = 0
-    to_port          = 0
+    from_port        = var.ports[2]
+    to_port          = var.ports[2]
     protocol         = "-1"
     cidr_blocks      = ["0.0.0.0/0"]
   }

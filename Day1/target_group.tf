@@ -1,8 +1,8 @@
 #Target group
 resource "aws_lb_target_group" "terraform_tg" {
   name     = "terraform-tg"
-  port     = 80
-  protocol = "HTTP"
+  port     = var.ports[0]
+  protocol = var.alb_protocol
   vpc_id   = aws_vpc.terraform_vpc.id
 }
 
@@ -13,3 +13,4 @@ resource "aws_lb_target_group_attachment" "terraform_ec2_attachment" {
   target_id        = aws_instance.database.id
   port             = 80
 }
+
